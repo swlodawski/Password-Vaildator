@@ -1,34 +1,33 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import validator from 'validator';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [errorMessage, setErrorMessage] = useState("")
 
+  const validate = (value) => {
+    if(validator.isStrongPassword(value, {
+      minLength: 8, minLowercase: 1,
+      minUppercase: 1, minNumbers: 1, minSymbols: 1
+    })) {
+      setErrorMessage("Is strong password")
+    } else {
+      setErrorMessage("Password is not strong enough")
+    }
+  }
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{
+      marginLeft: "200px",
+    }}><pre>
+      <h2>Checking password strength in React.js</h2>
+      <span>Enter Password: </span><input type="text" 
+      onChange={(e) => validate(e.target.value)}></input><br />
+      {errorMessage === '' ? null : <span style={{
+        fontWeight: "bold",
+        color: "red",
+      }}>{errorMessage}</span>}
+     </pre>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
   )
 }
 
